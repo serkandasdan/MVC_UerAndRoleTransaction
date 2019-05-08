@@ -1,0 +1,130 @@
+﻿
+@{
+    ViewBag.Title = "Ürünler";
+}
+
+@using MVC_CircloidTemplate.Models
+
+@model List<Product>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="block">
+            <div class="block-heading">
+                <div class="main-text h2">
+                    Ürünler Listesi
+                </div>
+                <div class="block-controls">
+                    <span aria-hidden="true" class="icon icon-arrow-down icon-size-medium block-control-collapse"></span>
+                    <a href="/Product/AddProduct" class="btn btn-success" role="button">Ürün Ekle</a>
+                </div>
+            </div>
+            <div class="block-content-outer">
+                <div class="block-content-inner">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Ürün Adı</th>
+                                <th>Tedarikçi ID</th>
+                                <th>Tedarikçi Adı</th>
+                                <th>Kategori ID</th>
+                                <th>Kategori Adı</th>
+                                <th>Birimdeki Miktar</th>
+                                <th>Fiyat</th>
+                                <th>Stok</th>
+                                <th>Siparişteki Miktar</th>
+                                <th>Yeniden Sipariş Miktarı</th>
+                                <th>Sonlandı</th>
+                                <th>Sepete Ekle</th>
+                                <th>Güncelle</th>
+                                <th>Sil</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (Product prd in Model)
+                            {
+                            <tr>
+                                <td>@prd.ProductName</td>
+                                <td>@prd.SupplierID</td>
+
+                                @if (prd.Supplier == null)
+                                {
+                                    <td></td>
+                                }
+                                else
+                                {
+                                    <td><span class="label label-primary">@prd.Supplier.CompanyName var</span></td>
+                                }
+                                <td>@prd.CategoryID</td>
+                                @if (prd.Category == null)
+                                {
+                                    <td></td>
+                                }
+                                else
+                                {
+                                    <td><span class="label label-info">@prd.Category.CategoryName</span></td>
+                                }
+
+                                <td>@prd.QuantityPerUnit</td>
+                                <td>@prd.UnitPrice</td>
+                                <td>@prd.UnitsInStock</td>
+                                <td>@prd.UnitsOnOrder</td>
+                                <td>@prd.ReorderLevel</td>
+                                @if (prd.Discontinued)
+                                {
+
+                                    <td><span class="label label-danger">Satışı Yok</span></td>
+                                    <td><a href="#" class="btn btn-default addCart" data-id="@prd.ProductID" disabled>Sepete Ekle</a></td>
+                                }
+                                else
+                                {
+                                    <td><span class="label label-success">Satışı var</span></td>
+                                    <td><a href="#" class="btn btn-default addCart" data-id="@prd.ProductID">Sepete Ekle</a></td>
+                                }
+
+                                <td><a href="/Product/UpdateProduct?prdID=@prd.ProductID&prdName=@prd.ProductName&prdFrom=Güncelleme" class="btn btn-info rounded">Güncelle</a></td>
+                                <td><a href="/Product/DeleteProduct/@prd.ProductID" class="btn btn-danger rounded">Sil</a></td>
+                                @*<td>
+            <a href="@Url.Action("DeleteProduct", "Product", new { prdID = prd.ProductID })" class="btn btn-danger rounded">Sil</a>
+        </td>*@
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Content/assets/js/required/jquery-1.11.1.min.js"></script>
+@section scripts{
+<script>
+    $(".addCart").click(function () {
+        var id = $(this).attr("data-id");
+        $.ajax({
+            type: "POST",
+            url: "/Product/AddCart/" + id,
+            success: function (messageAddCart) {
+                alert(messageAddCart);
+
+                $.ajax({
+                    type: "GET",
+                    url: "/Product/PartialProductCountNav",
+                    success: function (response) {
+                        $("#sepet").html(response);
+
+                    },
+                    error: function () {
+                        alert("Ürün sayısını getirme sırasında hata oluştu.");
+                    }
+                });
+            },
+            error: function () {
+                alert("Ürün sepete eklenirken ajax hatası alınmıştır")
+            }
+        })
+    });
+    </script>    
+   }

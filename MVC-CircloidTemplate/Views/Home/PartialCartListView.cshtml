@@ -1,0 +1,94 @@
+﻿
+
+@{
+    ViewBag.Title = "Sepetim";
+}
+
+@using MVC_CircloidTemplate.App_Classes
+
+@using MVC_CircloidTemplate.Models
+
+@model List<Product>
+
+
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Ürün Adı</th>
+            <th>Tedarikçi Adı</th>
+            <th>Kategori Adı</th>
+            <th>Birimdeki Miktar</th>
+            <th>Fiyat</th>
+            <th>Stok</th>
+            <th>Sepetten Çıkar</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            Cart crt;
+            if (Session["CurrentCart"] != null)
+            {
+                crt = (Cart)Session["CurrentCart"];
+
+            }
+            else
+            {
+                crt = new Cart();
+            }
+        }
+
+        @foreach (Product prd in crt.PrdList)
+        {
+            <tr>
+                <td>@prd.ProductName</td>
+
+                @if (prd.Supplier == null)
+                {
+                    <td></td>
+                }
+                else
+                {
+                    <td><span class="label label-primary">@prd.Supplier.CompanyName var</span></td>
+                }
+                @if (prd.Category == null)
+                {
+                    <td></td>
+                }
+                else
+                {
+                    <td><span class="label label-info">@prd.Category.CategoryName</span></td>
+                }
+
+                <td>@prd.QuantityPerUnit</td>
+                <td>@prd.UnitPrice</td>
+                <td>@prd.UnitsInStock</td>
+                <td><a href="#" class="btn btn-default removeFromCart" data-id="@prd.ProductID">Sepetten Çıkar</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $(".removeFromCart").click(function () {
+        var id = $(this).attr("data-id");
+        $.ajax({
+            type: "POST",
+            url: "/Home/RemoveCart/" + id,
+            success: function (messageRemoveCart) {
+                alert(messageRemoveCart);
+                $.ajax({
+                    type: "GET",
+                    url: "/Home/PartialCartListView",
+                    success: function (response) {
+                        $("#sepetList").html(response);
+                    },
+                });
+            },
+            error: function () {
+                alert("Ürün sepetten silinirken ajax hatası alınmıştır")
+            }
+        })
+    });
+</script>

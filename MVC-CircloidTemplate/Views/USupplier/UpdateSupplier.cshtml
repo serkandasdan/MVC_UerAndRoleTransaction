@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewBag.Title = "UpdateSupplier";
+}
+
+
+@using MVC_CircloidTemplate.Models
+
+@model Supplier
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="block">
+            <div class="block-heading">
+                <div class="main-text h2">
+                    Tedarikçi Güncelleme Sayfası
+                </div>
+                <div class="block-controls">
+                    <a href="/Supplier/Index"><span aria-hidden="true" class="icon icon-cross icon-size-medium block-control-remove"></span></a>
+                    <span aria-hidden="true" class="icon icon-arrow-down icon-size-medium block-control-collapse"></span>
+                </div>
+            </div>
+            <div class="block-content-outer">
+                <div class="block-content-inner">
+                    <form action="/USupplier/UpdateSupplier" method="post" role="form">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Şirket Adı: </label>
+                            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Şirket adı giriniz" name="CompanyName" value="@Model.CompanyName">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Müşteri Adı</label>
+                            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Müşteri adı giriniz" name="ContactName" value="@Model.ContactName">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Müşteri Ünvanı</label>
+                            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Müşteri ünvanı giriniz" name="ContactTitle" value="@Model.ContactTitle">
+                        </div>
+                        @*<div class="form-group">
+            <label for="exampleInputPassword1">Adres</label>
+            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Adres giriniz" name="Address">
+        </div>*@
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Şehir</label>
+                            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Şehir giriniz" name="City" value="@Model.City">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Bölge</label>
+                            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Bölge giriniz" name="Region" value="@Model.Region">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Posta Kodu</label>
+                            <input type="number" class="form-control" id="exampleInputPassword1" placeholder="Posta Kodu giriniz" name="PostalCode" value="@Model.PostalCode">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Ülke</label>
+                            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Ülke giriniz" name="Country" value="@Model.Country">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Telefon</label>
+                            <input type="number" class="form-control" id="exampleInputPassword1" placeholder="Telefon numarası giriniz" name="Phone" value="@Model.Phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Faks</label>
+                            <input type="number" class="form-control" id="exampleInputPassword1" placeholder="Faks numarası giriniz" name="Fax" value="@Model.Fax">
+                        </div>
+                        <div class="form-group">
+                            <label for="input-demo-h">Adres</label>
+                            <textarea class="form-control" rows="3" id="input-demo-h" name="Address"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" name="SupplierID" id="ssSupplierID" value="@Model.SupplierID" />
+                        </div>
+                        <button type="submit" class="btn btn-primary">Kaydet</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

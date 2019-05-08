@@ -1,0 +1,122 @@
+﻿
+@{
+    ViewBag.Title = "Üyeler";
+}
+
+@using System.Web.Security
+
+@model MembershipUserCollection
+
+
+@section body{
+
+    <script src="~/Content/assets/js/required/jquery-1.11.1.min.js"></script>
+
+    <script>
+        $(".roles").click(function () {
+            var un = $(this).attr("data-username");
+            $.ajax({
+                type: "GET",
+                url: "/User/UserRoles",
+                data: { username: un },
+                success: function (show) {
+                    alert(un + ": (" + show + ")");
+                }
+            });
+        });
+
+
+        $(document).ready(function () {
+            $(".deleteUser").click(function () {
+                var sonuc = confirm("Kayit silinsin mi?");
+                if (sonuc) {
+                    var ra = $(this).attr("data-UserName");
+                    $.ajax({
+                        type: "POST",
+                        url: "/User/DeleteUser?UserName=" + ra,
+
+                        success: function () {
+                            alert("Kayit silindi");
+                            window.location.replace("/User/Index");
+                        },
+                        error: function () {
+                            alert("Kayit silme sirasinda hata olustu.");
+                        }
+                    })
+                }
+            });
+            });
+   
+
+
+        $(document).ready(function () {
+            $(".addRole").on('click', function () {
+                const username = $(this).attr("data-username");
+                console.log(username);
+                window.location.href = "/User/AssignRole?username=" + username;
+            });
+
+        });
+
+
+        $(document).ready(function () {
+            $(".role").on('click', function () {
+                const username = $(this).attr("data-username");
+                console.log(username);
+                window.location.href = "/User/UserRole?username=" + username;
+            });
+
+        });
+    </script>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="block">
+            <div class="block-heading">
+                <div class="main-text h2">
+                    Üyeler Listesi
+                </div>
+                <div class="block-controls">
+                    <span aria-hidden="true" class="icon icon-arrow-down icon-size-medium block-control-collapse"></span>
+                    <a href="/User/AddUser" class="btn btn-success" role="button">Üye Ekle</a>
+                </div>
+            </div>
+            <div class="block-content-outer">
+                <div class="block-content-inner">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Kullanıcı Adı</th>
+                                <th>Email</th>
+                                <th>Kayıt Tarihi</th>
+                                <th>Sisteme Son Giriş Tarihi</th>
+                                <th>Rolleri</th>
+                                <th>Rol Ata</th>
+                                <th>Roles</th>
+                                <th>Sil</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (MembershipUser mu in Model)
+                            {
+                            <tr>
+                                <td>@mu.UserName</td>
+                                <td>@mu.Email</td>
+                                <td>@mu.CreationDate</td>
+                                <td>@mu.LastLoginDate</td>
+                                <td><a class="btn btn-primary roles" data-username="@mu.UserName">Rolleri</a></td>
+                                <td><a class="btn btn-primary addRole" data-username="@mu.UserName">Rol Ata</a></td>
+                                <td><a class="btn btn-primary role" data-username="@mu.UserName">Rolleri View</a></td>
+                                <td><a href="#" class="btn btn-danger deleteUser" data-UserName="@mu.UserName">Sil</a></td>
+                                
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
